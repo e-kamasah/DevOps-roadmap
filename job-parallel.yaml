@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+
+metadata:
+  name: parallel-job
+  namespace: development
+
+spec:
+  completions: 5
+  parallelism: 2
+
+  template:
+    spec:
+      containers:
+        - name: worker
+          image: busybox:latest
+          command: ["sh", "-c", "echo Worker started; sleep 10; echo Worker finished"]
+
+      restartPolicy: Never

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: StatefulSet
+
+metadata:
+  name: nginx-stateful
+  namespace: development
+
+spec:
+  serviceName: nginx-stateful
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: nginx-stateful
+
+  template:
+    metadata:
+      labels:
+        app: nginx-stateful
+
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+
+          ports:
+            - containerPort: 80
+
+          volumeMounts:
+            - name: data
+              mountPath: /usr/share/nginx/html
+
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+
+      spec:
+        accessModes:
+          - ReadWriteOnce
+
+        resources:
+          requests:
+            storage: 1Gi

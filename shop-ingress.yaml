@@ -1,0 +1,20 @@
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: shop-ingress
+  namespace: ingress-lab
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: ingress-lab-shop-strip-prefix@kubernetescrd
+spec:
+  ingressClassName: traefik
+  rules:
+    - http:
+        paths:
+          - path: /shop
+            pathType: Prefix
+            backend:
+              service:
+                name: shop-service
+                port:
+                  number: 80
